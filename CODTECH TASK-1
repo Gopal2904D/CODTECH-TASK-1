@@ -1,0 +1,30 @@
+import re
+
+def check_password_strength(password):
+    length = len(password)
+    if length < 8:
+        return "Weak: Password must be at least 8 characters long."
+
+    # Check for complexity
+    has_lower = re.search(r'[a-z]', password)
+    has_upper = re.search(r'[A-Z]', password)
+    has_digit = re.search(r'\d', password)
+    has_special = re.search(r'[!@#$%^&*(),.?":{}|<>]', password)
+
+    if not (has_lower and has_upper and has_digit and has_special):
+        return "Weak: Password must include lowercase, uppercase, digit, and special character."
+
+    # Check for uniqueness
+    if re.search(r'(.)\1{2,}', password):
+        return "Weak: Password should not contain repeating characters."
+
+    # Further checks for common patterns
+    common_patterns = ['password', '123456', 'qwerty', 'abc123']
+    if any(pattern in password.lower() for pattern in common_patterns):
+        return "Weak: Password is too common."
+
+    return "Strong: Password meets the complexity requirements."
+
+# Example usage
+password = input("Enter a password to check: ")
+print(check_password_strength(password))
